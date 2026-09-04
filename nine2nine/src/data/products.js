@@ -1,0 +1,42 @@
+export const products = [
+  {
+    id: 1,
+    name: 'Wraith Teardrop Pendant',
+    category: 'Necklaces',
+    price: 1899,
+    description: 'A fluid teardrop pendant in polished gold vermeil, hung on a fine box chain.',
+    image: '/pendant.png',
+  },
+  {
+    id: 2,
+    name: 'Molten Wave Ring',
+    category: 'Rings',
+    price: 1299,
+    description: 'An organic, hand-sculpted band that catches light along its curved surface.',
+    image: '/ring.png',
+  },
+  {
+    id: 3,
+    name: 'Open Cuff Bangle',
+    category: 'Bracelets',
+    price: 2199,
+    description: 'A sleek open bangle finished with rounded ball ends, sized to fit most wrists.',
+    image: '/bangle.png',
+  },
+  {
+    id: 4,
+    name: 'Knot Stud Earrings',
+    category: 'Earrings',
+    price: 999,
+    description: 'Compact interlocking knots in high-polish gold vermeil, for everyday wear.',
+    image: '/earrings.png',
+  },
+  {
+    id: 5,
+    name: 'Chain Link Bracelet',
+    category: 'Bracelets',
+    price: 1599,
+    description: 'A paperclip-link chain bracelet finished with the 929 signature tag.',
+    image: '/bracelet.png',
+  },
+]
