@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { products } from '../data/products.js'
-import { useCart } from '../context/CartContext.jsx'
+import { useCart } from '../context/useCart.js'
 import Divider from '../components/Divider.jsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ShoppingBag, CheckCircle, Sparkles, Shield, RefreshCw } from 'lucide-react'
@@ -12,6 +12,7 @@ export default function ProductDetail() {
   const { addItem } = useCart()
   const [showToast, setShowToast] = useState(false)
   const [activeTab, setActiveTab] = useState('details')
+  const [quantity, setQuantity] = useState(1)
 
   if (!product) {
     return (
@@ -25,7 +26,7 @@ export default function ProductDetail() {
   }
 
   const handleAddToCart = () => {
-    addItem(product)
+    addItem(product, quantity)
     setShowToast(true)
     setTimeout(() => setShowToast(false), 3000)
   }
@@ -70,6 +71,8 @@ export default function ProductDetail() {
           <img
             src={product.image}
             alt={product.name}
+            width={800}
+            height={1000}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent pointer-events-none" />
@@ -159,11 +162,33 @@ export default function ProductDetail() {
             </div>
           </motion.div>
 
-          {/* Interactive Add to Cart CTA */}
-          <motion.div variants={textVariants} className="mt-4">
+          {/* Interactive Add to Cart CTA with Quantity selector */}
+          <motion.div variants={textVariants} className="mt-4 flex gap-3 items-center">
+            <div className="flex items-center border border-gold/30 rounded-sm overflow-hidden bg-charcoal/40 h-12">
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="px-3 text-gold hover:bg-gold/10 transition-colors h-full flex items-center justify-center font-bold text-sm"
+                aria-label="Decrease quantity"
+              >
+                -
+              </button>
+              <span className="px-3 text-xs font-semibold text-ivory min-w-[28px] text-center select-none">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => q + 1)}
+                className="px-3 text-gold hover:bg-gold/10 transition-colors h-full flex items-center justify-center font-bold text-sm"
+                aria-label="Increase quantity"
+              >
+                +
+              </button>
+            </div>
             <motion.button
+              type="button"
               onClick={handleAddToCart}
-              className="w-full relative flex items-center justify-center gap-3 px-8 py-4 bg-transparent border border-gold text-gold font-body text-xs font-semibold uppercase tracking-widest overflow-hidden rounded-sm hover:bg-gold hover:text-ink transition-colors duration-300"
+              className="flex-1 relative flex items-center justify-center gap-3 px-6 h-12 bg-transparent border border-gold text-gold font-body text-xs font-semibold uppercase tracking-widest overflow-hidden rounded-sm hover:bg-gold hover:text-ink transition-colors duration-300"
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -186,7 +211,7 @@ export default function ProductDetail() {
             <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
             <div className="flex-1">
               <p className="text-xs font-semibold uppercase tracking-widest text-gold">Added to Bag</p>
-              <p className="text-[11px] text-ivory/80 mt-0.5">{product.name} added successfully.</p>
+              <p className="text-[11px] text-ivory/80 mt-0.5">{quantity}x {product.name} added successfully.</p>
             </div>
             <Link to="/cart" className="text-[10px] uppercase font-semibold text-gold underline tracking-wider ml-4">
               View Bag

@@ -1,20 +1,22 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
+import { useCart } from './useCart.js'
 
-const CartContext = createContext(null)
+export const CartContext = createContext(null)
+export { useCart }
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  function addItem(product) {
+  function addItem(product, quantity = 1) {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === product.id)
       if (existing) {
         return prev.map((i) =>
-          i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === product.id ? { ...i, quantity: i.quantity + quantity } : i
         )
       }
-      return [...prev, { ...product, quantity: 1 }]
+      return [...prev, { ...product, quantity }]
     })
     // Auto-open drawer for feedback
     setIsDrawerOpen(true)
@@ -48,10 +50,4 @@ export function CartProvider({ children }) {
       {children}
     </CartContext.Provider>
   )
-}
-
-export function useCart() {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart must be used within CartProvider')
-  return ctx
 }

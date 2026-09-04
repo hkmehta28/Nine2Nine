@@ -1,16 +1,14 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
-import { useCart } from '../context/CartContext.jsx'
+import { useCart } from '../context/useCart.js'
+import { calculateOrderTotals } from '../utils/pricing.js'
 import Divider from '../components/Divider.jsx'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckSquare } from 'lucide-react'
+import { Trash2, ShoppingBag, ArrowRight, ShieldCheck } from 'lucide-react'
 
 export default function Cart() {
-  const { items, removeItem, updateQuantity, total } = useCart()
+  const { items, removeItem, updateQuantity } = useCart()
 
-  const shippingCost = 0 // Free shipping
-  const estimatedTax = Math.round(total * 0.03) // 3% estimate tax
-  const orderTotal = total + shippingCost + estimatedTax
+  const { subtotal, tax, total } = calculateOrderTotals(items)
 
   if (items.length === 0) {
     return (
@@ -68,7 +66,7 @@ export default function Cart() {
                 className="flex gap-6 border-b border-gold/10 pb-6 items-center"
               >
                 <div className="w-20 h-24 sm:w-24 sm:h-28 bg-charcoal border border-gold/10 rounded-sm overflow-hidden flex-shrink-0">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" width="96" height="112" />
                 </div>
 
                 <div className="flex-1 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -139,11 +137,11 @@ export default function Cart() {
           <div className="space-y-3.5 text-xs text-ivory/70 tracking-wide font-light">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span className="font-medium">₹{total.toLocaleString('en-IN')}</span>
+              <span className="font-medium">₹{subtotal.toLocaleString('en-IN')}</span>
             </div>
             <div className="flex justify-between">
               <span>Estimated Tax (3%)</span>
-              <span className="font-medium">₹{estimatedTax.toLocaleString('en-IN')}</span>
+              <span className="font-medium">₹{tax.toLocaleString('en-IN')}</span>
             </div>
             <div className="flex justify-between">
               <span>Standard Shipping</span>
@@ -154,19 +152,21 @@ export default function Cart() {
 
             <div className="flex justify-between text-sm text-ivory font-semibold tracking-wider">
               <span>Total</span>
-              <span className="text-gold">₹{orderTotal.toLocaleString('en-IN')}</span>
+              <span className="text-gold">₹{total.toLocaleString('en-IN')}</span>
             </div>
           </div>
 
           {/* Checkout CTA */}
           <motion.button
-            className="w-full mt-6 py-4 bg-gold text-ink font-body text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm hover:bg-gold-bright transition-colors hover:shadow-lg hover:shadow-gold/15"
-            whileHover={{ scale: 1.01 }}
+            onClick={() => console.log('checkout: TODO - integrate payment gateway')}
+            disabled
+            className="w-full mt-6 py-4 bg-gold text-ink font-body text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm transition-colors hover:shadow-lg hover:shadow-gold/15 disabled:opacity-50 disabled:cursor-not-allowed"
             whileTap={{ scale: 0.98 }}
           >
             <span>Proceed to Checkout</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </motion.button>
+          <p className="text-[10px] text-ivory/40 text-center mt-2 tracking-wide">Checkout coming soon.</p>
 
           <div className="flex items-center gap-2 justify-center mt-6 text-[10px] uppercase tracking-widest text-ivory/40">
             <ShieldCheck className="w-3.5 h-3.5 text-gold/60" />

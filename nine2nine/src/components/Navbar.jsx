@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useCart } from '../context/CartContext.jsx'
+import { useCart } from '../context/useCart.js'
 import Logo from './Logo.jsx'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Menu, X } from 'lucide-react'

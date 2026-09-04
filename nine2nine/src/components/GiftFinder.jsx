@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { products } from '../data/products.js'
-import { useCart } from '../context/CartContext.jsx'
+import { useCart } from '../context/useCart.js'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, RefreshCw, ShoppingBag, ArrowRight, ArrowLeft } from 'lucide-react'
 

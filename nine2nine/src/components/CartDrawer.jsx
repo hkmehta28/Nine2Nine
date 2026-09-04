@@ -1,12 +1,16 @@
-import React, { useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { useCart } from '../context/CartContext.jsx'
+import { useRef, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useCart } from '../context/useCart.js'
+import { calculateOrderTotals } from '../utils/pricing.js'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck } from 'lucide-react'
 
 export default function CartDrawer() {
-  const { items, removeItem, updateQuantity, total, isDrawerOpen, setIsDrawerOpen } = useCart()
+  const { items, removeItem, updateQuantity, isDrawerOpen, setIsDrawerOpen } = useCart()
   const drawerRef = useRef(null)
+  const navigate = useNavigate()
+
+  const { subtotal, tax, total } = calculateOrderTotals(items)
 
   // Prevent scroll when drawer is open
   useEffect(() => {
@@ -28,6 +32,11 @@ export default function CartDrawer() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [setIsDrawerOpen])
+
+  const handleSecureCheckout = () => {
+    setIsDrawerOpen(false)
+    navigate('/cart')
+  }
 
   return (
     <AnimatePresence>
@@ -97,7 +106,7 @@ export default function CartDrawer() {
                       className="flex gap-4 border-b border-gold/5 pb-4"
                     >
                       <div className="w-16 h-20 bg-black/30 border border-gold/10 rounded-sm overflow-hidden flex-shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" width="64" height="80" />
                       </div>
                       <div className="flex-1 flex flex-col justify-between">
                         <div>
@@ -155,7 +164,11 @@ export default function CartDrawer() {
                 <div className="space-y-2 text-xs text-ivory/70 font-light">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span className="font-medium text-ivory">₹{total.toLocaleString('en-IN')}</span>
+                    <span className="font-medium text-ivory">₹{subtotal.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Estimated Tax (3%)</span>
+                    <span className="font-medium text-ivory">₹{tax.toLocaleString('en-IN')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
@@ -164,12 +177,13 @@ export default function CartDrawer() {
                 </div>
 
                 <div className="border-t border-gold/10 pt-3 flex justify-between text-sm text-ivory font-semibold">
-                  <span>Subtotal</span>
+                  <span>Total</span>
                   <span className="text-gold">₹{total.toLocaleString('en-IN')}</span>
                 </div>
 
                 <div className="space-y-2 pt-2">
                   <motion.button
+                    onClick={handleSecureCheckout}
                     className="w-full py-3.5 bg-gold text-ink font-body text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm hover:bg-gold-bright transition-colors"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}

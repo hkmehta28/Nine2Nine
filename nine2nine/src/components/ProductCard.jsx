@@ -1,7 +1,6 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { useCart } from '../context/CartContext.jsx'
+import { useCart } from '../context/useCart.js'
 import { ShoppingBag } from 'lucide-react'
 
 export default function ProductCard({ product, index }) {
@@ -35,6 +34,8 @@ export default function ProductCard({ product, index }) {
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             loading="lazy"
+            width="400"
+            height="500"
           />
           {/* Subtle gold sheen overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-gold/0 via-gold/5 to-gold/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -46,7 +47,7 @@ export default function ProductCard({ product, index }) {
               initial={{ y: 20, opacity: 0 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-full py-2.5 bg-gold text-ink font-body text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-3 transition-all duration-300 shadow-lg hover:bg-gold-bright"
+              className="w-full py-2.5 bg-gold text-ink font-body text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-sm opacity-100 translate-y-0 sm:opacity-0 sm:translate-y-3 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-300 shadow-lg hover:bg-gold-bright"
             >
               <ShoppingBag className="w-3.5 h-3.5 stroke-[2]" />
               <span>Quick Add</span>
